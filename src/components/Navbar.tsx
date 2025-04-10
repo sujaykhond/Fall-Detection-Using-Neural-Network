@@ -19,6 +19,12 @@ const Navbar = () => {
           Login
         </Link>
         <Link 
+          to="/register" 
+          className="text-blue-400 hover:text-blue-300 transition-colors"
+        >
+          Register
+        </Link>
+        <Link 
           to="/dashboard" 
           className="text-blue-400 hover:text-blue-300 transition-colors"
         >
