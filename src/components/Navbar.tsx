@@ -30,6 +30,12 @@ const Navbar = () => {
         >
           Dashboard
         </Link>
+        <Link 
+          to="/contact-us" 
+          className="text-blue-400 hover:text-blue-300 transition-colors"
+        >
+          Contact Us
+        </Link>
       </div>
     </nav>
   );

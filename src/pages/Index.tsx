@@ -120,6 +120,9 @@ const Index = () => {
                 <Button asChild variant="outline" className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10">
                   <Link to="/learn-more">Learn More</Link>
                 </Button>
+                <Button asChild variant="secondary" className="bg-detector-dark border-blue-500/30 text-blue-400 hover:bg-blue-500/10">
+                  <Link to="/contact-us">Contact Us</Link>
+                </Button>
               </div>
             </div>
           </div>

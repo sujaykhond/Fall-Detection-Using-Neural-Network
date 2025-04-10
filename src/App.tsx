@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import LearnMore from "./pages/LearnMore";
+import ContactUs from "./pages/ContactUs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/learn-more" element={<LearnMore />} />
+              <Route path="/contact-us" element={<ContactUs />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
