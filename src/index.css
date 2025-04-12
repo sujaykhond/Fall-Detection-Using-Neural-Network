@@ -5,34 +5,34 @@
 
 @layer base {
   :root {
-    /* Light mode variables */
-    --background: 0 0% 100%;
-    --foreground: 215 30% 6%;
+    /* Light mode variables with improved color harmony */
+    --background: 210 40% 98%; /* Soft light gray */
+    --foreground: 222 47% 11%; /* Deep charcoal for text */
     
-    --card: 0 0% 100%; 
-    --card-foreground: 215 30% 6%;
+    --card: 0 0% 100%; /* Pure white */
+    --card-foreground: 222 47% 11%; /* Deep charcoal */
     
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 30% 6%;
+    --popover: 210 40% 98%; /* Soft light gray */
+    --popover-foreground: 222 47% 11%; /* Deep charcoal */
     
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 217 91% 60%; /* Vibrant blue */
+    --primary-foreground: 0 0% 98%; /* Almost white */
     
-    --secondary: 217 32.6% 90%;
-    --secondary-foreground: 215 30% 6%;
+    --secondary: 217 32.6% 90%; /* Soft lavender gray */
+    --secondary-foreground: 222 47% 11%; /* Deep charcoal */
     
-    --muted: 217 32.6% 90%;
-    --muted-foreground: 215 20.2% 50%;
+    --muted: 210 40% 96%; /* Very soft gray */
+    --muted-foreground: 218 11% 65%; /* Muted gray */
     
-    --accent: 217 32.6% 90%;
-    --accent-foreground: 215 30% 6%;
+    --accent: 245 75% 82%; /* Soft periwinkle */
+    --accent-foreground: 222 47% 11%; /* Deep charcoal */
     
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%; /* Bright red */
+    --destructive-foreground: 0 0% 98%; /* Almost white */
     
-    --border: 217 24% 80%;
-    --input: 217 24% 80%;
-    --ring: 217 91% 60%;
+    --border: 217 24% 80%; /* Soft gray border */
+    --input: 217 24% 80%; /* Soft gray input */
+    --ring: 217 91% 60%; /* Vibrant blue ring */
     
     --radius: 0.5rem;
   }
