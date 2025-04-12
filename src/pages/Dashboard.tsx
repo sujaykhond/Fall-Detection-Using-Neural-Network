@@ -1,11 +1,14 @@
-
 import React, { useState } from 'react';
 import CameraFeed from '@/components/CameraFeed';
 import DetectionHistory from '@/components/DetectionHistory';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Bell, Settings, Users, Plus, FileCog, Shield } from 'lucide-react';
+import { Bell, Settings, Users, Plus, FileCog, Shield, UserPlus, X } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { toast } from "sonner";
 
 // Sample detection data
 const sampleDetections = [
@@ -35,9 +38,63 @@ const sampleDetections = [
   }
 ];
 
+// Sample emergency contacts
+const initialEmergencyContacts = [
+  {
+    id: '1',
+    name: 'Sujay Khond',
+    phone: '+91 77410 15729',
+    email: 'sujaykhond@gmail.com',
+  },
+  {
+    id: '2',
+    name: 'Parth Yendhe',
+    phone: '+91 73978 93290',
+    email: 'yendheparth63@gmail.com',
+  },
+  {
+    id: '3',
+    name: 'Rohit Shinde',
+    phone: '+91 99604 37623',
+    email: 'shinderohit1412@gmail.com',
+  },
+  {
+    id: '4',
+    name: 'Omkar Kadam',
+    phone: '+91 98904 66174',
+    email: 'omkarkadam12@gmail.com',
+  },
+];
+
 const Dashboard = () => {
   const [detections, setDetections] = useState(sampleDetections);
-  const [showDetections, setShowDetections] = useState(true); // This can toggle between showing or not
+  const [showDetections, setShowDetections] = useState(true);
+  const [emergencyContacts, setEmergencyContacts] = useState(initialEmergencyContacts);
+  const [isAddContactDialogOpen, setIsAddContactDialogOpen] = useState(false);
+  const [newContact, setNewContact] = useState({ name: '', phone: '', email: '' });
+  
+  const handleAddContact = () => {
+    // Basic validation
+    if (!newContact.name || !newContact.phone || !newContact.email) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    
+    const contact = {
+      id: Date.now().toString(),
+      ...newContact
+    };
+    
+    setEmergencyContacts([...emergencyContacts, contact]);
+    setNewContact({ name: '', phone: '', email: '' });
+    setIsAddContactDialogOpen(false);
+    toast.success("Emergency contact added successfully");
+  };
+  
+  const handleDeleteContact = (id: string) => {
+    setEmergencyContacts(emergencyContacts.filter(contact => contact.id !== id));
+    toast.success("Contact removed successfully");
+  };
 
   return (
     <div className="container py-8 max-w-6xl">
@@ -158,14 +215,112 @@ const Dashboard = () => {
         
         <TabsContent value="contacts" className="mt-6">
           <div className="detector-card">
-            <h3 className="text-xl mb-4">Emergency Contacts - Coming Soon</h3>
-            <p className="text-muted-foreground">
-              This tab will allow management of emergency contacts who will be
-              notified when a fall is detected.
-            </p>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl">Emergency Contacts</h3>
+              <Button 
+                onClick={() => setIsAddContactDialogOpen(true)}
+                className="bg-detector-blue hover:bg-blue-600"
+              >
+                <UserPlus className="mr-1 h-4 w-4" />
+                Add Contact
+              </Button>
+            </div>
+            
+            <div className="bg-detector-darker rounded-md p-2">
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-detector-darker">
+                    <TableHead>Name</TableHead>
+                    <TableHead>Phone</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead className="w-[100px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {emergencyContacts.map((contact) => (
+                    <TableRow key={contact.id} className="hover:bg-detector-card">
+                      <TableCell className="font-medium">{contact.name}</TableCell>
+                      <TableCell>{contact.phone}</TableCell>
+                      <TableCell>{contact.email}</TableCell>
+                      <TableCell>
+                        <ContextMenu>
+                          <ContextMenuTrigger>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Settings size={16} className="text-blue-400" />
+                            </Button>
+                          </ContextMenuTrigger>
+                          <ContextMenuContent className="bg-detector-card border-border/30">
+                            <ContextMenuItem
+                              onClick={() => handleDeleteContact(contact.id)}
+                              className="text-red-400 cursor-pointer"
+                            >
+                              <X className="mr-2 h-4 w-4" />
+                              Remove Contact
+                            </ContextMenuItem>
+                          </ContextMenuContent>
+                        </ContextMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </TabsContent>
       </Tabs>
+
+      <Dialog open={isAddContactDialogOpen} onOpenChange={setIsAddContactDialogOpen}>
+        <DialogContent className="bg-detector-card border-border/30 text-white">
+          <DialogHeader>
+            <DialogTitle>Add Emergency Contact</DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              Add a new contact to be notified in case of emergency fall detections.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <label htmlFor="name" className="text-sm">Name</label>
+              <input
+                id="name"
+                value={newContact.name}
+                onChange={(e) => setNewContact({...newContact, name: e.target.value})}
+                className="bg-detector-darker border border-border/30 rounded p-2 text-white"
+              />
+            </div>
+            <div className="grid gap-2">
+              <label htmlFor="phone" className="text-sm">Phone Number</label>
+              <input
+                id="phone"
+                value={newContact.phone}
+                onChange={(e) => setNewContact({...newContact, phone: e.target.value})}
+                className="bg-detector-darker border border-border/30 rounded p-2 text-white"
+              />
+            </div>
+            <div className="grid gap-2">
+              <label htmlFor="email" className="text-sm">Email Address</label>
+              <input
+                id="email"
+                type="email"
+                value={newContact.email}
+                onChange={(e) => setNewContact({...newContact, email: e.target.value})}
+                className="bg-detector-darker border border-border/30 rounded p-2 text-white"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsAddContactDialogOpen(false)}
+              className="border-border/30"
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleAddContact} className="bg-detector-blue hover:bg-blue-600">
+              Add Contact
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
