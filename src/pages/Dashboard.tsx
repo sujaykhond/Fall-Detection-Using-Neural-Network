@@ -3,13 +3,14 @@ import CameraFeed from '@/components/CameraFeed';
 import DetectionHistory from '@/components/DetectionHistory';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Bell, Settings, Users, Plus, FileCog, Shield, UserPlus, X, Calendar, Clock, History, Camera, CameraOff, SlidersHorizontal, Filter, Download, Eye, Trash2, RotateCcw, Sliders, Checkbox } from 'lucide-react';
+import { Bell, Settings, Users, Plus, FileCog, Shield, UserPlus, X, Calendar, Clock, History, Camera, CameraOff, SlidersHorizontal, Filter, Download, Eye, Trash2, RotateCcw, Sliders } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 
 // Sample detection data
 const sampleDetections = [
@@ -590,7 +591,7 @@ const Dashboard = () => {
                 id="name"
                 value={newContact.name}
                 onChange={(e) => setNewContact({...newContact, name: e.target.value})}
-                className="bg-detector-darker border border-border/30 rounded p-2 text-white"
+                className="bg-detector-darker border border-border/30 rounded w-full p-2 text-white"
               />
             </div>
             <div className="grid gap-2">
