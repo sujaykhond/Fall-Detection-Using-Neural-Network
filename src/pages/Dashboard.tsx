@@ -11,6 +11,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import AlertsDialog from '@/components/dashboard/AlertsDialog';
+import SettingsDialog from '@/components/dashboard/SettingsDialog';
 
 // Sample detection data
 const sampleDetections = [
@@ -95,6 +97,9 @@ const Dashboard = () => {
     sensitivity: '',
     notifications: false
   });
+  
+  const [isAlertsDialogOpen, setIsAlertsDialogOpen] = useState(false);
+  const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
 
   const handleAddContact = () => {
     // Basic validation
@@ -174,12 +179,22 @@ const Dashboard = () => {
         </div>
         
         <div className="flex gap-4">
-          <Button variant="outline" size="sm" className="bg-detector-card text-muted-foreground border-border/30">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="bg-detector-card text-muted-foreground border-border/30"
+            onClick={() => setIsAlertsDialogOpen(true)}
+          >
             <Bell className="mr-1 h-4 w-4" />
             Alerts
             <Badge className="ml-2 bg-red-500 text-white" variant="outline">3</Badge>
           </Button>
-          <Button variant="outline" size="sm" className="bg-detector-card text-muted-foreground border-border/30">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="bg-detector-card text-muted-foreground border-border/30"
+            onClick={() => setIsSettingsDialogOpen(true)}
+          >
             <Settings className="mr-1 h-4 w-4" />
             Settings
           </Button>
@@ -628,6 +643,16 @@ const Dashboard = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      <AlertsDialog 
+        isOpen={isAlertsDialogOpen} 
+        onOpenChange={setIsAlertsDialogOpen} 
+      />
+      
+      <SettingsDialog 
+        isOpen={isSettingsDialogOpen} 
+        onOpenChange={setIsSettingsDialogOpen} 
+      />
     </div>
   );
 };
