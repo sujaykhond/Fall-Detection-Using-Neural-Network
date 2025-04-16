@@ -54,7 +54,7 @@ const AlertsDialog = ({ isOpen, onOpenChange }: AlertsDialogProps) => {
 
   return (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="bg-detector-card border-border/30 text-white max-w-md">
+      <AlertDialogContent className="glass-dialog border-border/30 text-white max-w-md">
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5 text-detector-blue" />
@@ -69,7 +69,7 @@ const AlertsDialog = ({ isOpen, onOpenChange }: AlertsDialogProps) => {
           {alerts.map(alert => (
             <div 
               key={alert.id} 
-              className={`p-3 rounded-md border ${alert.isRead ? 'border-border/30 bg-detector-darker' : 'border-detector-blue/50 bg-detector-blue/5'} flex gap-3`}
+              className={`p-3 rounded-md glass ${alert.isRead ? 'bg-detector-darker/70' : 'border-detector-blue/50 bg-detector-blue/5'} flex gap-3`}
             >
               <div className={`
                 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center

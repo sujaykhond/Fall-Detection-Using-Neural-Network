@@ -1,6 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AlertTriangle, Video } from 'lucide-react';
+import { toast } from "sonner";
 
 interface CameraFeedProps {
   cameraId?: string;
@@ -12,8 +13,14 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ cameraId = "main", title = "Liv
   const [isLoading, setIsLoading] = useState(true);
   const [fallDetected, setFallDetected] = useState(false);
   const [lastDetection, setLastDetection] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
+    // Create audio element for alert sound
+    const audio = new Audio('/alert-sound.mp3');
+    audio.preload = 'auto';
+    audioRef.current = audio;
+
     // Simulate camera feed loading
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
@@ -26,6 +33,20 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ cameraId = "main", title = "Liv
         setFallDetected(true);
         setLastDetection(new Date().toLocaleTimeString());
         
+        // Play alert sound
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play().catch(err => {
+            console.error("Error playing alert sound:", err);
+          });
+        }
+        
+        // Show toast notification
+        toast.error("Fall Detected", {
+          description: `Fall detected on camera ${cameraId} at ${new Date().toLocaleTimeString()}`,
+          duration: 5000,
+        });
+        
         // Reset the alert after 3 seconds
         setTimeout(() => {
           setFallDetected(false);
@@ -36,11 +57,16 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ cameraId = "main", title = "Liv
     return () => {
       clearTimeout(loadingTimeout);
       clearInterval(fallDetectionInterval);
+      // Clean up audio element
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     };
-  }, []);
+  }, [cameraId]);
 
   return (
-    <div className="detector-card space-y-4">
+    <div className="detector-card space-y-4 backdrop-blur-sm bg-card/90 border border-border/30 shadow-lg">
       <div className="flex items-center gap-2">
         <Video className="text-blue-500" />
         <h2 className="text-xl font-medium">{title}</h2>
@@ -73,14 +99,14 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ cameraId = "main", title = "Liv
             </div>
             
             {/* Camera ID */}
-            <div className="absolute top-4 right-4 bg-black/60 px-2 py-1 rounded text-xs">
+            <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-xs">
               Camera ID: {cameraId}
             </div>
             
             {/* Fall detection alert */}
             {fallDetected && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-black/70 px-6 py-4 rounded-lg flex flex-col items-center gap-2">
+                <div className="bg-black/70 backdrop-blur-sm px-6 py-4 rounded-lg flex flex-col items-center gap-2 border border-red-500/30 shadow-lg">
                   <AlertTriangle className="h-8 w-8 text-red-500 animate-pulse" />
                   <span className="text-lg font-bold text-red-500">FALL DETECTED</span>
                   <span className="text-sm text-white">Alert sent at {lastDetection}</span>
@@ -89,7 +115,7 @@ const CameraFeed: React.FC<CameraFeedProps> = ({ cameraId = "main", title = "Liv
             )}
             
             {/* Timestamp */}
-            <div className="absolute bottom-4 right-4 bg-black/60 px-2 py-1 rounded text-xs">
+            <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-xs">
               {new Date().toLocaleString()}
             </div>
           </>

@@ -1,0 +1,4 @@
+
+// This is a placeholder - you need to upload an actual MP3 file to the public directory
+// Since we can't directly create binary files here, you'll need to add an alert sound file to your project manually
+// You can use any royalty-free alert sound file and name it "alert-sound.mp3"
