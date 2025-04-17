@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,7 +6,7 @@ import { Shield, ArrowRight, Monitor, Bell, Clock } from 'lucide-react';
 const Index = () => {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
+      {/* Hero Section with updated image */}
       <section className="py-16 md:py-24 px-4">
         <div className="container max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -37,14 +36,14 @@ const Index = () => {
             </div>
             
             <div className="relative">
-              <div className="aspect-video rounded-lg overflow-hidden border border-border/20 shadow-xl">
+              <div className="aspect-video rounded-lg overflow-hidden border border-border/20 shadow-xl glass-card">
                 <img 
-                  src="/lovable-uploads/c3c64b4d-c5ad-4161-aba0-3efe4af2057a.png" 
+                  src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80" 
                   alt="Fall Detector Dashboard Preview" 
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-detector-darker/80 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 bg-detector-card/80 backdrop-blur-sm px-3 py-2 rounded-md text-sm">
+                <div className="absolute bottom-4 left-4 glass-dialog px-3 py-2 rounded-md text-sm">
                   Live Monitoring Dashboard
                 </div>
               </div>
@@ -57,7 +56,7 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Features Section */}
+      {/* Features Section with glassmorphism */}
       <section className="py-16 px-4 bg-detector-dark">
         <div className="container max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -69,7 +68,7 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="detector-card">
+            <div className="glass-card p-6">
               <div className="rounded-full bg-blue-500/20 w-12 h-12 flex items-center justify-center mb-4">
                 <Monitor className="text-blue-500" />
               </div>
@@ -79,7 +78,7 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="detector-card">
+            <div className="glass-card p-6">
               <div className="rounded-full bg-blue-500/20 w-12 h-12 flex items-center justify-center mb-4">
                 <Bell className="text-blue-500" />
               </div>
@@ -89,7 +88,7 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="detector-card">
+            <div className="glass-card p-6">
               <div className="rounded-full bg-blue-500/20 w-12 h-12 flex items-center justify-center mb-4">
                 <Clock className="text-blue-500" />
               </div>
@@ -102,10 +101,10 @@ const Index = () => {
         </div>
       </section>
       
-      {/* CTA Section */}
+      {/* CTA Section with glassmorphism */}
       <section className="py-16 px-4">
         <div className="container max-w-6xl mx-auto">
-          <div className="detector-card bg-gradient-to-r from-detector-card to-detector-dark border-border/20">
+          <div className="glass-dialog bg-gradient-to-r from-detector-card to-detector-dark border-border/20">
             <div className="text-center max-w-2xl mx-auto py-8">
               <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 Ready to enhance safety with AI-powered monitoring?
@@ -129,8 +128,8 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Footer */}
-      <footer className="py-8 px-4 border-t border-border/20">
+      {/* Footer with glassmorphism */}
+      <footer className="py-8 px-4 border-t border-border/20 glass-nav">
         <div className="container max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">
