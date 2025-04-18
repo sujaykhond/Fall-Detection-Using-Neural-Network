@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
@@ -30,11 +32,23 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    toast.info("Google login coming soon!");
+    setSocialLoading('google');
+    // Simulate Google OAuth flow
+    setTimeout(() => {
+      setSocialLoading(null);
+      toast.success('Logged in with Google successfully!');
+      navigate('/dashboard');
+    }, 1500);
   };
 
   const handleGithubLogin = () => {
-    toast.info("Github login coming soon!");
+    setSocialLoading('github');
+    // Simulate GitHub OAuth flow
+    setTimeout(() => {
+      setSocialLoading(null);
+      toast.success('Logged in with GitHub successfully!');
+      navigate('/dashboard');
+    }, 1500);
   };
 
   return (
@@ -58,18 +72,38 @@ const Login = () => {
                 variant="outline"
                 className="w-full glass hover:bg-white/20"
                 onClick={handleGoogleLogin}
+                disabled={socialLoading !== null}
               >
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 mr-2" />
-                Google
+                {socialLoading === 'google' ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin"></div>
+                    <span>Logging in...</span>
+                  </div>
+                ) : (
+                  <>
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 mr-2" />
+                    Google
+                  </>
+                )}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 className="w-full glass hover:bg-white/20"
                 onClick={handleGithubLogin}
+                disabled={socialLoading !== null}
               >
-                <Github className="w-5 h-5 mr-2" />
-                Github
+                {socialLoading === 'github' ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin"></div>
+                    <span>Logging in...</span>
+                  </div>
+                ) : (
+                  <>
+                    <Github className="w-5 h-5 mr-2" />
+                    Github
+                  </>
+                )}
               </Button>
             </div>
             
@@ -116,7 +150,7 @@ const Login = () => {
             <Button 
               type="submit" 
               className="w-full bg-detector-blue hover:bg-blue-600 text-white" 
-              disabled={loading}
+              disabled={loading || socialLoading !== null}
             >
               {loading ? 'Logging in...' : 'Login'}
             </Button>

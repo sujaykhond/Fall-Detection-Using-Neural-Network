@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleRegister = (e: React.FormEvent) => {
@@ -32,6 +34,26 @@ const Register = () => {
       toast.success('Account created successfully!');
       navigate('/login');
     }, 1000);
+  };
+
+  const handleGoogleSignup = () => {
+    setSocialLoading('google');
+    // Simulate Google OAuth registration
+    setTimeout(() => {
+      setSocialLoading(null);
+      toast.success('Account created with Google!');
+      navigate('/dashboard');
+    }, 1500);
+  };
+
+  const handleGithubSignup = () => {
+    setSocialLoading('github');
+    // Simulate GitHub OAuth registration
+    setTimeout(() => {
+      setSocialLoading(null);
+      toast.success('Account created with GitHub!');
+      navigate('/dashboard');
+    }, 1500);
   };
 
   const togglePasswordVisibility = () => {
@@ -57,19 +79,39 @@ const Register = () => {
                 type="button"
                 variant="outline"
                 className="w-full glass hover:bg-white/20"
-                onClick={() => toast.info("Google signup coming soon!")}
+                onClick={handleGoogleSignup}
+                disabled={socialLoading !== null}
               >
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 mr-2" />
-                Google
+                {socialLoading === 'google' ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin"></div>
+                    <span>Signing up...</span>
+                  </div>
+                ) : (
+                  <>
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 mr-2" />
+                    Google
+                  </>
+                )}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 className="w-full glass hover:bg-white/20"
-                onClick={() => toast.info("Github signup coming soon!")}
+                onClick={handleGithubSignup}
+                disabled={socialLoading !== null}
               >
-                <Github className="w-5 h-5 mr-2" />
-                Github
+                {socialLoading === 'github' ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin"></div>
+                    <span>Signing up...</span>
+                  </div>
+                ) : (
+                  <>
+                    <Github className="w-5 h-5 mr-2" />
+                    Github
+                  </>
+                )}
               </Button>
             </div>
             
@@ -156,7 +198,7 @@ const Register = () => {
             <Button 
               type="submit" 
               className="w-full bg-detector-blue hover:bg-blue-600 text-white" 
-              disabled={loading}
+              disabled={loading || socialLoading !== null}
             >
               {loading ? 'Creating Account...' : 'Register'}
               <UserPlus className="ml-2 h-4 w-4" />
