@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,16 +9,18 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Bell, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface AlertsDialogProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
+  children: React.ReactNode;
 }
 
-const AlertsDialog = ({ isOpen, onOpenChange }: AlertsDialogProps) => {
+const AlertsDialog = ({ children }: AlertsDialogProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
   // Sample alerts data
   const alerts = [
     {
@@ -49,11 +51,14 @@ const AlertsDialog = ({ isOpen, onOpenChange }: AlertsDialogProps) => {
 
   const markAllAsRead = () => {
     // In a real app, you would update the alerts in state/database
-    onOpenChange(false);
+    setIsOpen(false);
   };
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialogTrigger asChild>
+        {children}
+      </AlertDialogTrigger>
       <AlertDialogContent className="glass-dialog border-border/30 text-white max-w-md">
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-center gap-2">

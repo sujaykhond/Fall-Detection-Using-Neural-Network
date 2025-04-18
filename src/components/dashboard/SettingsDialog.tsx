@@ -7,6 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import { 
   Settings, 
@@ -24,11 +25,11 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 interface SettingsDialogProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
+  children: React.ReactNode;
 }
 
-const SettingsDialog = ({ isOpen, onOpenChange }: SettingsDialogProps) => {
+const SettingsDialog = ({ children }: SettingsDialogProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [settings, setSettings] = useState({
     notifications: {
       pushNotifications: true,
@@ -62,11 +63,14 @@ const SettingsDialog = ({ isOpen, onOpenChange }: SettingsDialogProps) => {
   const saveSettings = () => {
     // In a real app, you would save the settings to a database or localStorage
     toast.success("Settings saved successfully");
-    onOpenChange(false);
+    setIsOpen(false);
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        {children}
+      </DialogTrigger>
       <DialogContent className="bg-detector-card border-border/30 text-white max-w-3xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -283,7 +287,7 @@ const SettingsDialog = ({ isOpen, onOpenChange }: SettingsDialogProps) => {
         <DialogFooter className="mt-4">
           <Button
             variant="outline"
-            onClick={() => onOpenChange(false)}
+            onClick={() => setIsOpen(false)}
             className="border-border/30 bg-detector-darker text-white hover:bg-detector-card"
           >
             Cancel

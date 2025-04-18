@@ -6,10 +6,38 @@ import { Shield, AlertTriangle, Settings, Bell, Camera } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import CameraFeed from '@/components/CameraFeed';
 import DetectionHistory from '@/components/DetectionHistory';
-import { AlertsDialog } from '@/components/dashboard/AlertsDialog';
-import { SettingsDialog } from '@/components/dashboard/SettingsDialog';
+import AlertsDialog from '@/components/dashboard/AlertsDialog';
+import SettingsDialog from '@/components/dashboard/SettingsDialog';
 import CameraButton from '@/components/CameraButton';
 import FallDetectionGraph from '@/components/FallDetectionGraph';
+
+// Sample detection data
+const sampleDetections = [
+  {
+    id: 'fall-1',
+    timestamp: 'Today, 2:45 PM',
+    location: 'Living Room',
+    severity: 'high' as const,
+    personName: 'Unknown',
+    status: 'new' as const
+  },
+  {
+    id: 'fall-2',
+    timestamp: 'Today, 11:20 AM',
+    location: 'Kitchen',
+    severity: 'medium' as const,
+    personName: 'Unknown',
+    status: 'acknowledged' as const
+  },
+  {
+    id: 'fall-3',
+    timestamp: 'Yesterday, 8:15 PM',
+    location: 'Bedroom',
+    severity: 'low' as const,
+    personName: 'Unknown',
+    status: 'resolved' as const
+  }
+];
 
 const Dashboard = () => {
   return (
@@ -66,7 +94,7 @@ const Dashboard = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <DetectionHistory />
+            <DetectionHistory detections={sampleDetections} />
           </CardContent>
         </Card>
       </div>
