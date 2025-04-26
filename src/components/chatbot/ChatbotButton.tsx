@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 interface ChatbotButtonProps {
   isOpen: boolean;
   onClick: () => void;
+  onSettingsClick?: () => void;
 }
 
-const ChatbotButton = ({ isOpen, onClick }: ChatbotButtonProps) => {
+const ChatbotButton = ({ isOpen, onClick, onSettingsClick }: ChatbotButtonProps) => {
   return (
     <Button
       onClick={onClick}

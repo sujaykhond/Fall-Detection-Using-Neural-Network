@@ -1,8 +1,8 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import ChatbotButton from './ChatbotButton';
 import ChatMessage from './ChatMessage';
-import { Send } from 'lucide-react';
+import ApiKeyModal from './ApiKeyModal';
+import { Send, Key } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Shield } from 'lucide-react';
@@ -30,6 +30,7 @@ const Chatbot = () => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -50,7 +51,13 @@ const Chatbot = () => {
   const handleSendMessage = async () => {
     if (!input.trim()) return;
 
-    // Add user message
+    const apiKey = localStorage.getItem('openai_api_key');
+    
+    if (!apiKey) {
+      setShowApiKeyModal(true);
+      return;
+    }
+
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
@@ -63,18 +70,6 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const apiKey = localStorage.getItem('openai_api_key');
-      
-      if (!apiKey) {
-        toast({
-          title: "API Key Required",
-          description: "Please set your OpenAI API key in the settings",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
-
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -134,17 +129,34 @@ const Chatbot = () => {
 
   return (
     <>
-      <ChatbotButton isOpen={isOpen} onClick={toggleChatbot} />
+      <ChatbotButton 
+        isOpen={isOpen} 
+        onClick={toggleChatbot} 
+        onSettingsClick={() => setShowApiKeyModal(true)}
+      />
       
+      <ApiKeyModal 
+        isOpen={showApiKeyModal} 
+        onClose={() => setShowApiKeyModal(false)} 
+      />
+
       {isOpen && (
         <div className="fixed bottom-24 right-6 w-80 md:w-96 h-96 bg-detector-card border border-border/20 rounded-lg shadow-lg flex flex-col z-50 overflow-hidden">
-          {/* Chatbot header */}
-          <div className="bg-detector-blue/10 p-4 flex items-center border-b border-border/20">
-            <Shield className="h-5 w-5 text-detector-blue mr-2" />
-            <h3 className="font-medium">Fall Detector Assistant</h3>
+          <div className="bg-detector-blue/10 p-4 flex items-center justify-between border-b border-border/20">
+            <div className="flex items-center">
+              <Shield className="h-5 w-5 text-detector-blue mr-2" />
+              <h3 className="font-medium">Fall Detector Assistant</h3>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setShowApiKeyModal(true)}
+              title="Manage API Key"
+            >
+              <Key className="h-4 w-4" />
+            </Button>
           </div>
           
-          {/* Messages container */}
           <div className="flex-1 p-4 overflow-y-auto bg-detector-dark/30">
             {messages.map((message) => (
               <ChatMessage 
@@ -157,7 +169,6 @@ const Chatbot = () => {
             <div ref={messagesEndRef} />
           </div>
           
-          {/* Input area */}
           <div className="p-3 border-t border-border/20 bg-detector-card flex">
             <Input
               ref={inputRef}
