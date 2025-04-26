@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ChatbotButton from './ChatbotButton';
 import ChatMessage from './ChatMessage';
-import { Send, Key } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Shield } from 'lucide-react';
@@ -20,7 +20,7 @@ const initialMessages: Message[] = [
   {
     id: '1',
     type: 'bot',
-    text: 'Hello! I\'m your Fall Detector assistant. Please set up your API key to enable advanced features.',
+    text: 'Hello! I\'m your Fall Detector assistant. How can I help you today?',
     timestamp: new Date(),
   },
 ];
@@ -29,8 +29,6 @@ const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState('');
-  const [apiKey, setApiKey] = useState('');
-  const [isSettingKey, setIsSettingKey] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -42,50 +40,14 @@ const Chatbot = () => {
   };
 
   useEffect(() => {
-    // Try to get API key from localStorage
-    const savedApiKey = localStorage.getItem('chatbot_api_key');
-    if (savedApiKey) {
-      setApiKey(savedApiKey);
-    }
-    
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
     }
     scrollToBottom();
   }, [isOpen, messages]);
 
-  const saveApiKey = () => {
-    if (!input.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter a valid API key",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    localStorage.setItem('chatbot_api_key', input.trim());
-    setApiKey(input.trim());
-    setInput('');
-    setIsSettingKey(false);
-    toast({
-      title: "Success",
-      description: "API key saved successfully",
-    });
-  };
-
-  const handleSendMessage = async () => {
+  const handleSendMessage = () => {
     if (!input.trim()) return;
-
-    if (!apiKey) {
-      toast({
-        title: "API Key Required",
-        description: "Please set up your API key first",
-        variant: "destructive",
-      });
-      setIsSettingKey(true);
-      return;
-    }
 
     // Add user message
     const userMessage: Message = {
@@ -95,54 +57,51 @@ const Chatbot = () => {
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages([...messages, userMessage]);
     setInput('');
 
-    try {
-      // Here you would make your API call
-      // This is a placeholder for the API integration
-      const response = await fetch('https://api.your-ai-service.com/chat', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: input,
-        }),
-      });
+    // Simulate bot response after a short delay
+    setTimeout(() => {
+      const botResponses: Record<string, string> = {
+        'hello': 'Hi there! How can I help you with Fall Detector today?',
+        'hi': 'Hello! Need information about our fall detection system?',
+        'how does it work': 'Our Fall Detector uses advanced CNN-based AI to monitor for falls in real-time. When a fall is detected, it sends immediate alerts to designated contacts.',
+        'features': 'Our key features include real-time monitoring, instant alerts, and detection history with timestamps and video clips.',
+        'contact': 'You can reach our team via the Contact Us page, or call directly at the numbers listed there.',
+        'price': 'For pricing information, please contact our sales team through the Contact Us page.',
+        'help': 'I can answer questions about our fall detection system, its features, how it works, or connect you with our team. What would you like to know?',
+      };
 
-      if (!response.ok) {
-        throw new Error('API request failed');
+      let botReply = '';
+      const lowercaseInput = input.toLowerCase();
+      
+      // Check for keyword matches
+      for (const [keyword, response] of Object.entries(botResponses)) {
+        if (lowercaseInput.includes(keyword)) {
+          botReply = response;
+          break;
+        }
+      }
+      
+      // Default response if no keywords match
+      if (!botReply) {
+        botReply = "I'm not sure I understand. Could you rephrase that? Or you can ask about how our fall detection works, its features, or contact information.";
       }
 
-      const data = await response.json();
-      
       const botMessage: Message = {
         id: Date.now().toString(),
         type: 'bot',
-        text: data.response || "I apologize, but I couldn't process that request.",
+        text: botReply,
         timestamp: new Date(),
       };
 
       setMessages(prev => [...prev, botMessage]);
-    } catch (error) {
-      console.error('Chat API Error:', error);
-      toast({
-        title: "Error",
-        description: "Failed to get response from AI service",
-        variant: "destructive",
-      });
-    }
+    }, 1000);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      if (isSettingKey) {
-        saveApiKey();
-      } else {
-        handleSendMessage();
-      }
+      handleSendMessage();
     }
   };
 
@@ -153,19 +112,9 @@ const Chatbot = () => {
       {isOpen && (
         <div className="fixed bottom-24 right-6 w-80 md:w-96 h-96 bg-detector-card border border-border/20 rounded-lg shadow-lg flex flex-col z-50 overflow-hidden">
           {/* Chatbot header */}
-          <div className="bg-detector-blue/10 p-4 flex items-center justify-between border-b border-border/20">
-            <div className="flex items-center">
-              <Shield className="h-5 w-5 text-detector-blue mr-2" />
-              <h3 className="font-medium">Fall Detector Assistant</h3>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSettingKey(!isSettingKey)}
-              className="h-8 w-8"
-            >
-              <Key className={`h-4 w-4 ${apiKey ? 'text-green-400' : 'text-yellow-400'}`} />
-            </Button>
+          <div className="bg-detector-blue/10 p-4 flex items-center border-b border-border/20">
+            <Shield className="h-5 w-5 text-detector-blue mr-2" />
+            <h3 className="font-medium">Fall Detector Assistant</h3>
           </div>
           
           {/* Messages container */}
@@ -185,22 +134,18 @@ const Chatbot = () => {
           <div className="p-3 border-t border-border/20 bg-detector-card flex">
             <Input
               ref={inputRef}
-              type={isSettingKey ? "password" : "text"}
-              placeholder={isSettingKey ? "Enter API Key..." : "Type a message..."}
+              type="text"
+              placeholder="Type a message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               className="bg-detector-dark border-border/20"
             />
             <Button 
-              onClick={isSettingKey ? saveApiKey : handleSendMessage}
+              onClick={handleSendMessage}
               className="ml-2 bg-detector-blue hover:bg-blue-600"
             >
-              {isSettingKey ? (
-                <Key className="h-4 w-4" />
-              ) : (
-                <Send className="h-4 w-4" />
-              )}
+              <Send className="h-4 w-4" />
             </Button>
           </div>
         </div>
