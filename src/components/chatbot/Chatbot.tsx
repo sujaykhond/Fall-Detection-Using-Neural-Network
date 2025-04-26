@@ -29,6 +29,7 @@ const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -46,7 +47,7 @@ const Chatbot = () => {
     scrollToBottom();
   }, [isOpen, messages]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!input.trim()) return;
 
     // Add user message
@@ -57,36 +58,52 @@ const Chatbot = () => {
       timestamp: new Date(),
     };
 
-    setMessages([...messages, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
+    setIsLoading(true);
 
-    // Simulate bot response after a short delay
-    setTimeout(() => {
-      const botResponses: Record<string, string> = {
-        'hello': 'Hi there! How can I help you with Fall Detector today?',
-        'hi': 'Hello! Need information about our fall detection system?',
-        'how does it work': 'Our Fall Detector uses advanced CNN-based AI to monitor for falls in real-time. When a fall is detected, it sends immediate alerts to designated contacts.',
-        'features': 'Our key features include real-time monitoring, instant alerts, and detection history with timestamps and video clips.',
-        'contact': 'You can reach our team via the Contact Us page, or call directly at the numbers listed there.',
-        'price': 'For pricing information, please contact our sales team through the Contact Us page.',
-        'help': 'I can answer questions about our fall detection system, its features, how it works, or connect you with our team. What would you like to know?',
-      };
+    try {
+      const apiKey = localStorage.getItem('openai_api_key');
+      
+      if (!apiKey) {
+        toast({
+          title: "API Key Required",
+          description: "Please set your OpenAI API key in the settings",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
 
-      let botReply = '';
-      const lowercaseInput = input.toLowerCase();
-      
-      // Check for keyword matches
-      for (const [keyword, response] of Object.entries(botResponses)) {
-        if (lowercaseInput.includes(keyword)) {
-          botReply = response;
-          break;
-        }
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a helpful assistant for a Fall Detection system. You help users understand how the fall detection works, provide safety tips, and answer questions about the system\'s features. Be concise but informative.',
+            },
+            {
+              role: 'user',
+              content: input,
+            },
+          ],
+          temperature: 0.7,
+          max_tokens: 150,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response');
       }
-      
-      // Default response if no keywords match
-      if (!botReply) {
-        botReply = "I'm not sure I understand. Could you rephrase that? Or you can ask about how our fall detection works, its features, or contact information.";
-      }
+
+      const data = await response.json();
+      const botReply = data.choices[0].message.content;
 
       const botMessage: Message = {
         id: Date.now().toString(),
@@ -96,11 +113,21 @@ const Chatbot = () => {
       };
 
       setMessages(prev => [...prev, botMessage]);
-    }, 1000);
+    } catch (error) {
+      console.error('Error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to get response. Please check your API key and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSendMessage();
     }
   };
@@ -135,15 +162,17 @@ const Chatbot = () => {
             <Input
               ref={inputRef}
               type="text"
-              placeholder="Type a message..."
+              placeholder={isLoading ? "Getting response..." : "Type a message..."}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               className="bg-detector-dark border-border/20"
+              disabled={isLoading}
             />
             <Button 
               onClick={handleSendMessage}
               className="ml-2 bg-detector-blue hover:bg-blue-600"
+              disabled={isLoading}
             >
               <Send className="h-4 w-4" />
             </Button>
