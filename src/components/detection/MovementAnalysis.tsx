@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
-import { Walking, BedDouble, AlertTriangle } from "lucide-react";
+import { BedDouble, AlertTriangle, ArrowRight } from "lucide-react";
 import type { MovementAnalysis as MovementAnalysisType } from '@/types/medical';
 
 const MovementAnalysis = () => {
@@ -45,7 +45,7 @@ const MovementAnalysis = () => {
       case 'lying':
         return <BedDouble className="h-5 w-5" />;
       case 'walking':
-        return <Walking className="h-5 w-5" />;
+        return <ArrowRight className="h-5 w-5" />; // Changed from Walking to ArrowRight
       case 'posture':
         return <AlertTriangle className="h-5 w-5" />;
     }
