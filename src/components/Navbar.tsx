@@ -8,8 +8,12 @@ const Navbar = () => {
   return (
     <nav className="px-6 py-4 bg-card border-b border-border/20 flex items-center justify-between">
       <Link to="/" className="flex items-center gap-2">
-        <Shield className="h-8 w-8 text-detector-blue" />
-        <span className="text-2xl font-bold">Fall Detector</span>
+        <img 
+          src="/lovable-uploads/c004be3d-3a52-4404-bebc-f51a3cbf729b.png" 
+          alt="FallSense Logo" 
+          className="h-8 w-8" 
+        />
+        <span className="text-2xl font-bold">FallSense</span>
       </Link>
       
       <div className="flex items-center gap-6">

@@ -6,13 +6,17 @@ import { Shield, ArrowRight, Monitor, Bell, Clock } from 'lucide-react';
 const Index = () => {
   return (
     <div className="min-h-screen">
-      {/* Hero Section with updated image */}
+      {/* Hero Section with updated branding */}
       <section className="py-16 md:py-24 px-4">
         <div className="container max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-detector-blue/10 text-detector-blue text-sm font-medium">
-                <Shield className="w-4 h-4 mr-2" />
+                <img 
+                  src="/lovable-uploads/c004be3d-3a52-4404-bebc-f51a3cbf729b.png" 
+                  alt="FallSense Logo" 
+                  className="w-4 h-4 mr-2" 
+                />
                 <span>Advanced CNN-Based Detection</span>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
@@ -128,17 +132,21 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Footer with glassmorphism */}
+      {/* Footer update */}
       <footer className="py-8 px-4 border-t border-border/20 glass-nav">
         <div className="container max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">
-              <Shield className="h-5 w-5 text-detector-blue" />
-              <span className="font-bold">Fall Detector</span>
+              <img 
+                src="/lovable-uploads/c004be3d-3a52-4404-bebc-f51a3cbf729b.png" 
+                alt="FallSense Logo" 
+                className="h-5 w-5" 
+              />
+              <span className="font-bold">FallSense</span>
             </div>
             
             <div className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} Fall Detector. All rights reserved.
+              &copy; {new Date().getFullYear()} FallSense. All rights reserved.
             </div>
           </div>
         </div>
