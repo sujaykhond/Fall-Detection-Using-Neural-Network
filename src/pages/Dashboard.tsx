@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,8 +9,9 @@ import AlertsDialog from '@/components/dashboard/AlertsDialog';
 import SettingsDialog from '@/components/dashboard/SettingsDialog';
 import CameraButton from '@/components/CameraButton';
 import FallDetectionGraph from '@/components/FallDetectionGraph';
+import MedicalProfileForm from '@/components/profile/MedicalProfileForm';
+import MovementAnalysis from '@/components/detection/MovementAnalysis';
 
-// Sample detection data
 const sampleDetections = [
   {
     id: 'fall-1',
@@ -69,64 +69,61 @@ const Dashboard = () => {
         </div>
       </header>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="glass-card col-span-1 lg:col-span-2 border-border/20">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2">
-              <Camera className="h-5 w-5" /> Live Camera Feed
-            </CardTitle>
-            <CardDescription>
-              Real-time monitoring with AI fall detection
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <CameraFeed />
-          </CardContent>
-        </Card>
+      <Tabs defaultValue="monitor" className="w-full">
+        <TabsList className="glass-card grid w-full grid-cols-4 mb-6">
+          <TabsTrigger value="monitor">Monitor</TabsTrigger>
+          <TabsTrigger value="analysis">Analysis</TabsTrigger>
+          <TabsTrigger value="profile">Medical Profile</TabsTrigger>
+          <TabsTrigger value="history">History</TabsTrigger>
+        </TabsList>
         
-        <Card className="glass-card border-border/20">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5" /> Detection Status
-            </CardTitle>
-            <CardDescription>
-              Recent fall detection events
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <DetectionHistory detections={sampleDetections} />
-          </CardContent>
-        </Card>
-      </div>
-      
-      <div className="mt-6">
-        <Tabs defaultValue="analytics" className="w-full">
-          <TabsList className="glass-card grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="history">Detection History</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="analytics" className="space-y-6">
-            <FallDetectionGraph />
-          </TabsContent>
-          
-          <TabsContent value="history">
-            <Card className="glass-card border-border/20">
-              <CardHeader>
-                <CardTitle>Detection History</CardTitle>
+        <TabsContent value="monitor">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Card className="glass-card col-span-1 lg:col-span-2 border-border/20">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2">
+                  <Camera className="h-5 w-5" /> Live Camera Feed
+                </CardTitle>
                 <CardDescription>
-                  Complete history of all fall detection events
+                  Real-time monitoring with AI fall detection
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-6 text-muted-foreground">
-                  No falls detected in the past 7 days
-                </div>
+                <CameraFeed />
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+            
+            <Card className="glass-card border-border/20">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5" /> Detection Status
+                </CardTitle>
+                <CardDescription>
+                  Recent fall detection events
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <DetectionHistory detections={sampleDetections} />
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="analysis">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <MovementAnalysis />
+            <FallDetectionGraph />
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="profile">
+          <MedicalProfileForm />
+        </TabsContent>
+        
+        <TabsContent value="history">
+          <DetectionHistory detections={sampleDetections} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
