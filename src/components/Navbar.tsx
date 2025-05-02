@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shield } from 'lucide-react';
@@ -5,7 +6,7 @@ import { ThemeToggle } from './ThemeToggle';
 
 const Navbar = () => {
   return (
-    <nav className="px-6 py-4 bg-card border-b border-border/20 flex items-center justify-between">
+    <nav className="px-6 py-4 glass-nav border-b border-border/20 flex items-center justify-between">
       <Link to="/" className="flex items-center gap-2">
         <Shield className="h-8 w-8 text-detector-blue" />
         <span className="text-2xl font-bold">FallSense</span>
