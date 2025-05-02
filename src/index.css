@@ -5,11 +5,67 @@
 
 @layer base {
   :root {
-    /* ... keep existing code (Light mode variables with improved color harmony) */
+    /* Light mode variables with improved color harmony */
+    --background: 210 40% 98%; /* Soft light gray */
+    --foreground: 222 47% 11%; /* Deep charcoal for text */
+    
+    --card: 0 0% 100%; /* Pure white */
+    --card-foreground: 222 47% 11%; /* Deep charcoal */
+    
+    --popover: 210 40% 98%; /* Soft light gray */
+    --popover-foreground: 222 47% 11%; /* Deep charcoal */
+    
+    --primary: 217 91% 60%; /* Vibrant blue */
+    --primary-foreground: 0 0% 98%; /* Almost white */
+    
+    --secondary: 217 32.6% 90%; /* Soft lavender gray */
+    --secondary-foreground: 222 47% 11%; /* Deep charcoal */
+    
+    --muted: 210 40% 96%; /* Very soft gray */
+    --muted-foreground: 218 11% 65%; /* Muted gray */
+    
+    --accent: 245 75% 82%; /* Soft periwinkle */
+    --accent-foreground: 222 47% 11%; /* Deep charcoal */
+    
+    --destructive: 0 84.2% 60.2%; /* Bright red */
+    --destructive-foreground: 0 0% 98%; /* Almost white */
+    
+    --border: 217 24% 80%; /* Soft gray border */
+    --input: 217 24% 80%; /* Soft gray input */
+    --ring: 217 91% 60%; /* Vibrant blue ring */
+    
+    --radius: 0.5rem;
   }
  
   .dark {
-    /* ... keep existing code (Dark mode variables) */
+    /* Dark mode variables */
+    --background: 215 30% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 25% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 25% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 217 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 24% 17%;
+    --input: 217 24% 17%;
+    --ring: 217 91% 60%;
   }
 }
 
@@ -32,7 +88,7 @@
     @apply text-red-500 animate-pulse-alert;
   }
   
-  /* Glassmorphism styles */
+  /* Added glassmorphism styles */
   .glass {
     @apply backdrop-blur-md bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10;
   }
@@ -48,40 +104,4 @@
   .glass-nav {
     @apply backdrop-blur-lg bg-white/70 dark:bg-black/50 border-b border-white/10 dark:border-white/5 shadow-sm;
   }
-  
-  /* Neumorphism styles */
-  .neuro-inset {
-    @apply bg-detector-dark border border-detector-darker shadow-[inset_3px_3px_6px_rgba(0,0,0,0.3),inset_-3px_-3px_6px_rgba(255,255,255,0.05)] rounded-lg;
-  }
-  
-  .neuro-outset {
-    @apply bg-detector-dark border border-white/5 shadow-[6px_6px_12px_rgba(0,0,0,0.3),-6px_-6px_12px_rgba(255,255,255,0.05)] rounded-lg;
-  }
-  
-  .neuro-button {
-    @apply bg-detector-dark border border-white/5 shadow-[3px_3px_6px_rgba(0,0,0,0.2),-3px_-3px_6px_rgba(255,255,255,0.05)] hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-3px_-3px_6px_rgba(255,255,255,0.05)] transition-all duration-300 rounded-lg;
-  }
-  
-  /* Combined glassmorphism and neumorphism */
-  .glass-neuro {
-    @apply backdrop-blur-lg bg-white/5 dark:bg-black/30 border border-white/20 dark:border-white/10 shadow-[5px_5px_10px_rgba(0,0,0,0.3),-5px_-5px_10px_rgba(255,255,255,0.05)] rounded-lg;
-  }
-  
-  .glass-neuro-inset {
-    @apply backdrop-blur-lg bg-white/5 dark:bg-black/20 border border-white/20 dark:border-white/5 shadow-[inset_3px_3px_6px_rgba(0,0,0,0.25),inset_-3px_-3px_6px_rgba(255,255,255,0.03)] rounded-lg;
-  }
-  
-  .glow-blue {
-    @apply relative;
-  }
-  
-  .glow-blue::before {
-    content: '';
-    @apply absolute -inset-1 bg-detector-blue/20 rounded-lg blur-lg opacity-75 -z-10 transition-all duration-300;
-  }
-  
-  .glow-blue:hover::before {
-    @apply bg-detector-blue/30 blur-xl;
-  }
 }
-
